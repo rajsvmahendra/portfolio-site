@@ -20,7 +20,8 @@ export default function setSplitText() {
   const TriggerStart = window.innerWidth <= 1024 ? "top 60%" : "20% 60%";
   const ToggleAction = "play pause resume reverse";
 
-  paras.forEach((para: ParaElement) => {
+  // ───────────────── PARAGRAPHS ─────────────────
+  paras.forEach((para) => {
     para.classList.add("visible");
 
     if (para.anim) {
@@ -33,15 +34,16 @@ export default function setSplitText() {
       linesClass: "split-line",
     });
 
-    if (!para.split) return; // ✅ TS guard
+    const words = para.split.words;
+    if (!words) return;
 
     para.anim = gsap.fromTo(
-      para.split.words,
+      words,
       { autoAlpha: 0, y: 80 },
       {
         autoAlpha: 1,
         scrollTrigger: {
-          trigger: para.parentElement?.parentElement,
+          trigger: para.parentElement?.parentElement ?? undefined,
           toggleActions: ToggleAction,
           start: TriggerStart,
         },
@@ -53,7 +55,8 @@ export default function setSplitText() {
     );
   });
 
-  titles.forEach((title: ParaElement) => {
+  // ───────────────── TITLES ─────────────────
+  titles.forEach((title) => {
     if (title.anim) {
       title.anim.progress(1).kill();
       title.split?.revert();
@@ -64,15 +67,16 @@ export default function setSplitText() {
       linesClass: "split-line",
     });
 
-    if (!title.split) return; // ✅ TS guard
+    const chars = title.split.chars;
+    if (!chars) return;
 
     title.anim = gsap.fromTo(
-      title.split.chars,
+      chars,
       { autoAlpha: 0, y: 80, rotate: 10 },
       {
         autoAlpha: 1,
         scrollTrigger: {
-          trigger: title.parentElement?.parentElement,
+          trigger: title.parentElement?.parentElement ?? undefined,
           toggleActions: ToggleAction,
           start: TriggerStart,
         },
